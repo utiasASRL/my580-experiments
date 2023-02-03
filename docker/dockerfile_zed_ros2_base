@@ -1,0 +1,21 @@
+# adapted from https://www.stereolabs.com/docs/docker/configure-ros-dockerfile/
+FROM zed_ros2:latest
+
+ENV ROS_DISTRO "foxy"
+ENV ROS2_WS "/my580_ros2_ws"
+
+# Create a workspace and clone the zed ros2 repo.
+SHELL ["/bin/bash", "-c"] # change default from /bin/sh to /bin/bash
+RUN sudo apt update && source /opt/ros/foxy/setup.bash \
+&& mkdir -p "${ROS2_WS}/src" \
+&& cd "/${ROS2_WS}/src" \
+&& git clone --recursive https://github.com/stereolabs/zed-ros2-wrapper.git \
+&& cd .. \
+&& rosdep install --from-paths src --ignore-src -r -y  \
+&& rm -rf /var/lib/apt/lists/*
+
+# Set the working folder at startup
+WORKDIR "${ROS2_WS}"
+
+COPY ./ros_entrypoint.sh "/${ROS2_WS}/ros_entrypoint.sh"
+ENTRYPOINT ["./ros_entrypoint.sh"]

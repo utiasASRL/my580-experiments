@@ -1,0 +1,22 @@
+FROM zed_ros2_built:latest
+
+# this doesn't work, but it does work from inside the container for some reason
+# the error has something to do with libcuda.so.1 not being found.
+# RUN source /opt/ros/foxy/setup.bash \
+# && colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release \
+# && echo source $(pwd)/install/local_setup.bash >> ~/.bashrc \
+# && source ~/.bashrc \
+#&& rm -rf /var/lib/apt/lists/*
+
+#SHELL ["/bin/bash", "-c"] # change default from /bin/sh to /bin/bash
+#RUN source /opt/ros/foxy/setup.bash 
+# && cd / \ 
+# && colcon build --symlink-install \
+# && source ./install/local_setup.bash
+# setup entrypoint
+# WORKDIR "${ROS2_WS}"
+
+#CMD ["bash"]
+
+COPY ./ros_entrypoint.sh "/${ROS2_WS}/ros_entrypoint.sh"
+ENTRYPOINT ["./ros_entrypoint.sh"]

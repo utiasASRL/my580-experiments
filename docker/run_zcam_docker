@@ -1,0 +1,9 @@
+# run xhost so that we can see things
+xhost +si:localuser:root
+
+sudo docker run -it --net=host --gpus all \
+    --privileged \
+    --env="NVIDIA_DRIVER_CAPABILITIES=all" \
+    --env="DISPLAY" \
+    --volume "/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    stereolabs/zed:3.7-gl-devel-cuda11.4-ubuntu20.04 bash
