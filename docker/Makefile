@@ -20,7 +20,7 @@ build-base: build-core
 
 # Build the overlay image (depends on base image build)
 .PHONY: build-overlay
-build-overlay: build-base
+build-overlay: 
 	sudo docker build -f dockerfile_zed_ros2_overlay -t zed_ros2_overlay .
 
 run-base:
@@ -36,3 +36,9 @@ run-overlay:
 	${DOCKER_ARGS} \
 	--volume="${ROS2_WS_LOCAL}/src/my580_ros2/":"${ROS2_WS_DOCKER}/src/my580_ros2/":rw \
 	zed_ros2_overlay bash
+
+run-zed2:
+	sudo docker run -it --net=host --gpus all --privileged \
+	${DOCKER_ARGS} \
+	--volume="${ROS2_WS_LOCAL}/src/my580_ros2/":"${ROS2_WS_DOCKER}/src/my580_ros2/":rw \
+	zed_ros2_overlay ros2 launch zed_wrapper zed2.launch.py
