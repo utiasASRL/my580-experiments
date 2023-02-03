@@ -9,32 +9,33 @@ Current pipeline to install the hierarchy of docker images.
 ```
 make build-core # creates zed_ros2
 make build-base # creates zed_ros2_base
-make run-base
-```
-
-Run inside container (to build zed ros2 packages):
-```
-colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release
-exit
-```
-
-Run outside container:
-```
-sudo docker ps | grep zed_ros2_base # find CONTAINER_ID (first element of line)
-sudo docker commit [CONTAINER_ID] zed_ros2_built # save image
-make build-overlay # build overlay image
+make build-zed-compiled # Compiles zed ros libraries
+make build-overlay # builds overlay 
 ```
 
 ## Running instructions
 
-The docker container to run for development is zed_ros2_overlay.
+The docker container to run for development is ros_terminal.
 
 ```
-make run-overlay 
+make run-ros-term
 ```
 
 The image is run with the folder `src/my580_ros2/` mounted to the identical location
 inside the docker image, so any changes are automatically in synch. 
+
+The following command starts the ZED 2 node in a separate container (zed2_publish):
+
+```
+make run-zed2
+```
+
+The following command opens rviz for visualization in s aseparate container (rviz_container)
+```
+make run-rviz
+```
+
+
 
 ## Credits
 
