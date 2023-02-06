@@ -20,7 +20,6 @@ build-base: build-core
 
 # Run colcon inside the docker and save the updated image
 build-zed-compiled: build-base
-	xhost +local:docker
 	docker run -it --net=host --gpus all --privileged \
 	--name "zed_ros2_compiled" \
 	${DOCKER_ARGS} zed_ros2_base  \
@@ -32,7 +31,22 @@ build-zed-compiled: build-base
 .PHONY: build-overlay
 build-overlay:
 	docker build -f dockerfile_zed_ros2_overlay -t zed_ros2_overlay .
+
+# Build the apriltag recognition container
+build-apriltag:
+	docker build -f dockerfile_apriltag_overlay -t apriltag_overlay .
+	docker rm apriltag_compile
+	docker run -it --net=host --gpus all --privileged \
+	--name "apriltag_compile" \
+	--volume="${ROS2_WS_LOCAL}/src/":"${ROS2_WS_DOCKER}/src/":rw \
+	${DOCKER_ARGS} apriltag_overlay bash
+#colcon build --symlink-install
+#docker commit apriltag_compile apriltag_overlay
+#docker rm apriltag_compile
 	
+
+# RUN PARTS
+# Open a terminal with ros2
 run-ros-term:
 	docker run -it --gpus all --privileged \
 	--net=host --ipc=host \
@@ -41,6 +55,16 @@ run-ros-term:
 	--name "ros_terminal" \
 	zed_ros2_overlay bash
 	docker container rm ros_terminal
+
+# Dev terminal for apriltag
+run-apriltag-term:
+	docker run -it --gpus all --privileged \
+	--net=host --ipc=host \
+	${DOCKER_ARGS} \
+	--volume="${ROS2_WS_LOCAL}/src/my580_ros2/":"${ROS2_WS_DOCKER}/src/my580_ros2/":rw \
+	--name "apriltag_dev_term" \
+	apriltag_overlay bash
+	docker container rm apriltag_dev_term
 
 # run zed2 camera publisher container.
 run-zed2:
@@ -52,6 +76,7 @@ run-zed2:
 	zed_ros2_built ros2 launch zed_wrapper zed2.launch.py
 	docker container rm zed2_publish
 
+# Run visualization
 run-rviz:
 	docker run -it --gpus all --privileged \
 	--net=host --ipc=host \

@@ -1,0 +1,26 @@
+version: '3.9'
+services:
+  ros2_dev_term: 
+    image: zed_ros2_overlay:latest
+    build: .
+    network_mode: host
+    ipc: host
+    privileged: true
+    command: bash
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - type: bind
+        source: /tmp/.X11-unix
+        target: /tmp/.X11-unix
+      - type: bind
+        source: /home/asrl/research/my580ds/src/my580_ros2/
+        target: /my580_ros2_ws/src/my580_ros2/
+    environment:
+      - DISPLAY=${DISPLAY}
+      - NVIDIA_DRIVER_CAPABILITIES=all

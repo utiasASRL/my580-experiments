@@ -1,0 +1,9 @@
+{
+    "name": "ros2 Development Container",
+  
+    // The order of the files is important since later files override previous ones
+    "dockerComposeFile": "docker/docekr-compose-ros2-dev.yaml",
+    "service": "ros2_dev_term",
+    "workspaceFolder": "/my580_ros2_ws",
+    "shutdownAction": "stopCompose"
+}
