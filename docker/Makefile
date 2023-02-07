@@ -35,14 +35,13 @@ build-overlay:
 # Build the apriltag recognition container
 build-apriltag:
 	docker build -f dockerfile_apriltag_overlay -t apriltag_overlay .
-	docker rm apriltag_compile
-	docker run -it --net=host --gpus all --privileged \
+	docker run -it --net=host --ipc=host --gpus all --privileged \
 	--name "apriltag_compile" \
-	--volume="${ROS2_WS_LOCAL}/src/":"${ROS2_WS_DOCKER}/src/":rw \
+	--volume="${ROS2_WS_LOCAL}/src/tag_recog/":"${ROS2_WS_DOCKER}/src/tag_recog":rw \
 	${DOCKER_ARGS} apriltag_overlay bash
 #colcon build --symlink-install
 #docker commit apriltag_compile apriltag_overlay
-#docker rm apriltag_compile
+	docker rm apriltag_compile
 	
 
 # RUN PARTS

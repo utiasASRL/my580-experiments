@@ -2,33 +2,34 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge  
-
+from std_msgs.msg import String
 import cv2
 import apriltag
 import numpy as np
 
 class AprilTagRecog(Node):
 
-    def __init__(self, pub_topic, sub_topic):
+    def __init__(self,pub_topic, sub_topic):
         # Init node
-        super().__init__('AprilTagRecog')
+        super().__init__('apriltag_recog')
         # Define subscription
         self.sub = self.create_subscription(Image,sub_topic,self.image_callback,10)
-        self.subscription  # prevent unused variable warning
         # Define publications
         self.pub_img = self.create_publisher(Image, pub_topic, 10)
-        self.pub_tagData = self.create_publisher()
+        #self.pub_tagData = self.create_publisher()
+        # Define apriltag type
+        self.tagtype = "tag36h11"
 
     def image_callback(self, img_msg):
-        self.get_logger().info('[AprlTag] New Image:')
-        self.get_logger().info(img_msg.header)
+        self.get_logger().info('[AprlTag] New Image')
+        # self.get_logger().info(img_msg.header)
         # Bridge from ros to opencv
         bridge = CvBridge()
-        image = bridge(img_msg, desired_encoding='passthrough')
+        image = bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         # Create Detector
         self.get_logger().info("[AprlTag] detecting AprilTags...")
-        options = apriltag.DetectorOptions(families="tagcustom48h12")
+        options = apriltag.DetectorOptions(families=self.tagtype)
         detector = apriltag.Detector(options)
         results = detector.detect(gray)
         self.get_logger().info(f"[AprlTag] {len(results)} total AprilTags detected")
@@ -59,8 +60,7 @@ class AprilTagRecog(Node):
         # Publish the new image
         img_msg_out = bridge.cv2_to_imgmsg(image, encoding="passthrough")
         self.pub_img.publish(img_msg_out)
-        # Publish the 
-        pass
+        #  TODO : Publish the tag information 
 
 # Define main block
 def main(args=None):
@@ -68,10 +68,11 @@ def main(args=None):
 
     # Spin up left image detector
     pub_topic = 'apriltag/image/left'
-    sub_topic = '/zed2/zed_node/left/image_rect_color'
-    tag_left = AprilTagRecog(pub_topic,sub_topic)
+    sub_topic = 'zed2/zed_node/left/image_rect_color'
+    tag_left = AprilTagRecog(pub_topic, sub_topic)
+    print('Spinning up node')
     rclpy.spin(tag_left)
-
+    print('exited node')
     rclpy.shutdown()
 
 
