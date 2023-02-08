@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'apriltag_recog = tag_recog.apriltag_recog:main',
+            'apriltag_detect = tag_recog.apriltag_detect:main'
         ],
     },
 )

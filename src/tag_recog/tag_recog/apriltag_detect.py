@@ -6,21 +6,41 @@ from std_msgs.msg import String
 import cv2
 import apriltag
 import numpy as np
+from copy import deepcopy
 
-class AprilTagRecog(Node):
+class AprilTagDetect(Node):
 
-    def __init__(self,pub_topic, sub_topic):
+    def __init__(self,topicList):
         # Init node
-        super().__init__('apriltag_recog')
-        # Define subscription
-        self.sub = self.create_subscription(Image,sub_topic,self.image_callback,10)
-        # Define publications
-        self.pub_img = self.create_publisher(Image, pub_topic, 10)
-        #self.pub_tagData = self.create_publisher()
+        super().__init__('apriltag_detect')
+        # Define pub and sub dictionaries, keys are sub topic names
+        self.sub={}
+        self.pub_img={}
+        self.pub_info={}
+        i = 0
+        for topics in topicList:
+            # Extract
+            sub_topic, pub_topic_img = topics
+            # Define publications
+            pub_img = self.create_publisher(Image, pub_topic_img, 10)
+            # pub_tags = self.create_publisher(..., pub)
+            # Define wrapper function to allow new variable input.
+            # Local scoping of pubs to fix variables for lambda definition.
+            wrapper_fcn = lambda msg, pub_img=pub_img : self.image_callback(msg, pub_img)
+            # Define subscription
+            self.create_subscription(Image,sub_topic, wrapper_fcn,10)
         # Define apriltag type
+        # self.tagtype = "tagCustom48h12"
         self.tagtype = "tag36h11"
+       
+    
+    def image_callback(self, img_msg, pub_img):
+        """This function takes in a ros image message and finds the apriltags in the image.
+        Apriltag info and new image with bounding boxes are then published to ros.
 
-    def image_callback(self, img_msg):
+        Args:
+            img_msg (Image): ROS image
+        """
         self.get_logger().info('[AprlTag] New Image')
         # self.get_logger().info(img_msg.header)
         # Bridge from ros to opencv
@@ -53,26 +73,28 @@ class AprilTagRecog(Node):
             cv2.circle(image, (cX, cY), 5, (0, 0, 255), -1)
             # draw the tag family on the image
             tagFamily = r.tag_family.decode("utf-8")
-            cv2.putText(image, tagFamily, (ptA[0], ptA[1] - 15),
+            tagID = str(r.tag_id)
+            tagLabel = tagID + ' : '+tagFamily
+            cv2.putText(image, tagLabel, (ptA[0], ptA[1] - 15),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
             self.get_logger().info(f"[AprlTag] tag family: {tagFamily}")
             
         # Publish the new image
         img_msg_out = bridge.cv2_to_imgmsg(image, encoding="passthrough")
-        self.pub_img.publish(img_msg_out)
+        pub_img.publish(img_msg_out)
         #  TODO : Publish the tag information 
 
 # Define main block
 def main(args=None):
     rclpy.init(args=args)
 
-    # Spin up left image detector
-    pub_topic = 'apriltag/image/left'
-    sub_topic = 'zed2/zed_node/left/image_rect_color'
-    tag_left = AprilTagRecog(pub_topic, sub_topic)
-    print('Spinning up node')
-    rclpy.spin(tag_left)
-    print('exited node')
+    # define input and output topics
+    topicList = [('zed2/zed_node/left/image_rect_color','apriltag/image/left')]
+    topicList += [('zed2/zed_node/right/image_rect_color','apriltag/image/right')]
+    # Create node and spin up
+    tag_detect = AprilTagDetect(topicList)
+    rclpy.spin(tag_detect)
+    
     rclpy.shutdown()
 
 
