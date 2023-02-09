@@ -57,3 +57,5 @@ __pycache__
 apriltags/apriltag-imgs
 apriltags/*.pdf
 src/apriltag_msgs
+ros2-vicon-receiver
+output/

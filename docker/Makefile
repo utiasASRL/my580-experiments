@@ -5,82 +5,101 @@ DOCKER_VOLUMES = \
 	--volume="/tmp/.X11-unix:/tmp/.X11-unix"
 DOCKER_ENV_VARS = \
 	--env="NVIDIA_DRIVER_CAPABILITIES=all" \
-	--env="DISPLAY" 
-DOCKER_ARGS = ${DOCKER_VOLUMES} ${DOCKER_ENV_VARS}
+	--env="DISPLAY" \
+	--net=host --ipc=host \
+	-it --gpus all --privileged
+DOCKER_ARGS = ${DOCKER_ENV_VARS} ${DOCKER_VOLUMES} 
 
-# Build the core image
-.PHONY: build-core
-build-core:
-	docker build -f dockerfile_zed_ros2 -t zed_ros2 .
+ROS_APRIL_VOLUMES = \
+	--volume="${ROS2_WS_LOCAL}/src/tag_recog":"${ROS2_WS_DOCKER}/src/tag_recog":rw
 
-# Build the base image
-.PHONY: build-base
-build-base: build-core
-	docker build -f dockerfile_zed_ros2_base -t zed_ros2_base .
+ROS_VOLUMES = ${ROS_APRIL_VOLUMES}\
+	--volume="${ROS2_WS_LOCAL}/ros2-vicon-receiver":"${ROS2_WS_DOCKER}/ros2-vicon-receiver":rw \
+	--volume="${ROS2_WS_LOCAL}/output":"${ROS2_WS_DOCKER}/output":rw
+
+BAG_OUTPUT = "test"
+BAG_TOPICS = \
+	zed2/zed_node/left/image_rect_color \
+	zed2/zed_node/right/image_rect_color  \
+  apriltag/image/left  \
+	apriltag/image/right
 
 # Run colcon inside the docker and save the updated image
-build-zed-compiled: build-base
-	docker run -it --net=host --gpus all --privileged \
-	--name "zed_ros2_compiled" \
-	${DOCKER_ARGS} zed_ros2_base  \
+build-zed-compiled: 
+	docker build -f dockerfile_zed_ros2_base -t zed_ros2_base .
+	-docker container rm -f container_tmp 
+	docker run ${DOCKER_ARGS} \
+	--name container_tmp \
+	zed_ros2_base \
 	colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release
-	docker commit zed_ros2_compiled zed_ros2_built
-	docker rm zed_ros2_compiled
-
-# Build the overlay image (depends on base image build)
-.PHONY: build-overlay
-build-overlay:
-	docker build -f dockerfile_zed_ros2_overlay -t zed_ros2_overlay .
+	docker commit container_tmp zed_ros2_built
+	docker container rm container_tmp 
 
 # Build the apriltag recognition container
 build-apriltag:
 	docker build -f dockerfile_apriltag_overlay -t apriltag_overlay .
-	docker run -it --net=host --ipc=host --gpus all --privileged \
-	--name "apriltag_compile" \
-	--volume="${ROS2_WS_LOCAL}/src/tag_recog/":"${ROS2_WS_DOCKER}/src/tag_recog":rw \
-	${DOCKER_ARGS} apriltag_overlay bash
-#colcon build --symlink-install
-#docker commit apriltag_compile apriltag_overlay
-	docker rm apriltag_compile
+	-docker container rm -f container_tmp 
+	docker run ${DOCKER_ARGS} ${ROS_APRIL_VOLUMES} \
+	--name container_tmp \
+	apriltag_overlay bash -c "colcon build --symlink-install"
+	docker commit container_tmp apriltag_overlay
+	docker container rm container_tmp 
+
+build-apriltag-vicon:
+	-docker container rm -f container_tmp
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name container_tmp \
+	apriltag_overlay bash -c "cd ros2-vicon-receiver; ./install_libs.sh; cd vicon_receiver; colcon build --symlink-install" 
+	docker commit container_tmp apriltag_vicon_overlay
+	docker container rm container_tmp 
 	
-
 # RUN PARTS
-# Open a terminal with ros2
-run-ros-term:
-	docker run -it --gpus all --privileged \
-	--net=host --ipc=host \
-	${DOCKER_ARGS} \
-	--volume="${ROS2_WS_LOCAL}/src/my580_ros2/":"${ROS2_WS_DOCKER}/src/my580_ros2/":rw \
-	--name "ros_terminal" \
-	zed_ros2_overlay bash
-	docker container rm ros_terminal
-
 # Dev terminal for apriltag
 run-apriltag-term:
-	docker run -it --gpus all --privileged \
-	--net=host --ipc=host \
-	${DOCKER_ARGS} \
-	--volume="${ROS2_WS_LOCAL}/src/my580_ros2/":"${ROS2_WS_DOCKER}/src/my580_ros2/":rw \
-	--name "apriltag_dev_term" \
+	-docker container rm -f "run-apriltag-term"
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-apriltag-term" \
 	apriltag_overlay bash
-	docker container rm apriltag_dev_term
+	docker container rm -f "run-apriltag-term" 
 
-# run zed2 camera publisher container.
+# Run zed2 camera publisher
 run-zed2:
-	docker run -it --gpus all --privileged \
-	--net=host --ipc=host \
-	${DOCKER_ARGS} \
-	--volume="${ROS2_WS_LOCAL}/src/my580_ros2/":"${ROS2_WS_DOCKER}/src/my580_ros2/":rw \
-	--name "zed2_publish" \
+	-docker container rm -f "run-zed2"
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-zed2" \
 	zed_ros2_built ros2 launch zed_wrapper zed2.launch.py
-	docker container rm zed2_publish
+	docker container rm -f "run-zed2" 
+
+# Run vicon publisher
+run-vicon:
+	-docker container rm -f "run-vicon"
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-vicon" \
+	apriltag_vicon_overlay bash -c \
+	"source ros2-vicon-receiver/vicon_receiver/install/local_setup.bash; ros2 launch vicon_receiver client.launch.py"
+	docker container rm -f "run-vicon"
 
 # Run visualization
 run-rviz:
-	docker run -it --gpus all --privileged \
-	--net=host --ipc=host \
-	${DOCKER_ARGS} \
-	--volume="${ROS2_WS_LOCAL}/src/my580_ros2/":"${ROS2_WS_DOCKER}/src/my580_ros2/":rw \
-	--name "rviz_container" \
-	zed_ros2_built rviz2 -d src/my580_ros2/rvizconfig.rviz
-	docker container rm rviz_container
+	xhost + 
+	-docker container rm -f "run-rviz" 
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-rviz" --env "QT_DEBUG_PLUGINS=1" \
+	apriltag_vicon_overlay rviz2 -d rvizconfig.rviz
+	docker container rm -f "run-rviz"
+
+# Record bag file
+run-bag-record: 
+	-docker container rm -f "run-bag-record"
+	-docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-bag-record" \
+	zed_ros2_built bash -c "cd output/; ros2 bag record -o ${BAG_OUTPUT} ${BAG_TOPICS}"
+	docker container rm -f "run-bag-record" 
+
+# Replay bag file
+run-bag-play:
+	-docker container rm -f "run-bag-play" 
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-bag-play" \
+	zed_ros2_built bash -c "cd output/; ros2 bag play ${BAG_OUTPUT}"
+	docker container rm -f "run-bag-play" 

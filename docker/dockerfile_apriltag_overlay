@@ -1,13 +1,6 @@
 FROM zed_ros2_built:latest
 
-ENV ROS_DISTRO "foxy"
-ENV ROS2_WS "/my580_ros2_ws"
-
-COPY ./ros_entrypoint.sh "/${ROS2_WS}/ros_entrypoint.sh"
-ENTRYPOINT ["./ros_entrypoint.sh"]
-
 # OpenCV
 RUN pip install opencv-python
 # Apriltag
 RUN pip install apriltag
-    
