@@ -7,8 +7,6 @@ We use docker for running ros.
 Current pipeline to install the hierarchy of docker images. 
 
 ```
-make build-core # creates zed_ros2
-make build-base # creates zed_ros2_base
 make build-zed-compiled # Compiles zed ros libraries
 make build-overlay # builds overlay 
 ```

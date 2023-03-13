@@ -17,12 +17,22 @@ ROS_VOLUMES = ${ROS_APRIL_VOLUMES}\
 	--volume="${ROS2_WS_LOCAL}/ros2-vicon-receiver":"${ROS2_WS_DOCKER}/ros2-vicon-receiver":rw \
 	--volume="${ROS2_WS_LOCAL}/output":"${ROS2_WS_DOCKER}/output":rw
 
-BAG_OUTPUT = "test"
+BAG_OUTPUT = "zed2-data"
 BAG_TOPICS = \
+	zed2/zed_node/left/camera_info \
 	zed2/zed_node/left/image_rect_color \
-	zed2/zed_node/right/image_rect_color  \
-  apriltag/image/left  \
-	apriltag/image/right
+	zed2/zed_node/left/image_rect_gray \
+	zed2/zed_node/left_raw/camera_info \
+	zed2/zed_node/left_raw/image_rect_color \
+	zed2/zed_node/left_raw/image_rect_gray \
+	zed2/zed_node/right/camera_info \
+	zed2/zed_node/right/image_rect_color \
+	zed2/zed_node/right/image_rect_gray \
+	zed2/zed_node/right_raw/camera_info \
+	zed2/zed_node/right_raw/image_rect_color \
+	zed2/zed_node/right_raw/image_rect_gray
+  #apriltag/image/left  \
+	#apriltag/image/right
 
 # Run colcon inside the docker and save the updated image
 build-zed-compiled: 
