@@ -7,18 +7,31 @@
   gsave                                        
   pagewidth 2 div pageheight 2 div translate   
   0 0 moveto                                   
-  1.0 pagewidth mul dup scale                  
+  0.9 pagewidth mul dup scale                  
   1 -1 scale                                   
   -.5 -.5 translate                            
   10 10 2 [ 10 0 0 10 0 0 ] { img } image 
   0 setlinewidth .5 setgray [0.002 0.01] 0 setdash 
   0 0 moveto 1 0 lineto 1 1 lineto 0 1 lineto  
   closepath stroke                             
-  0.45 0.5 moveto 
-  0.55 0.5 lineto 
+  newpath
+  0.42 0.42 moveto
+  0.58 0.42 lineto
+  0.58 0.58 lineto
+  0.42 0.58 lineto
+  closepath 
+  gsave
+  0.0 0.0 0.0 setrgbcolor
+  fill
+  1.0 1.0 1.0 setrgbcolor
+  grestore                                     
+  0 setlinewidth 0.2 setgray [1.0 1.0] 0 setdash 
+  newpath                   
+  0.48 0.5 moveto 
+  0.52 0.5 lineto 
   closepath stroke                             
-  0.5 0.45 moveto
-  0.5 0.55 lineto
+  0.5 0.48 moveto
+  0.5 0.52 lineto
   closepath stroke                             
   0.5 0.5 0.02 0 360 arc
   closepath stroke                             
