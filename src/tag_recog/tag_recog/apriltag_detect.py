@@ -4,7 +4,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge  
 from std_msgs.msg import String
 import cv2
-import apriltag
+import dt_apriltags as apriltag
 import numpy as np
 from copy import deepcopy
 
@@ -30,8 +30,8 @@ class AprilTagDetect(Node):
             # Define subscription
             self.create_subscription(Image,sub_topic, wrapper_fcn,10)
         # Define apriltag type
-        # self.tagtype = "tagCustom48h12"
-        self.tagtype = "tag36h11"
+        self.tagtype = "tagCustom48h12"
+        # self.tagtype = "tag36h11"
        
     
     def image_callback(self, img_msg, pub_img):
@@ -49,8 +49,7 @@ class AprilTagDetect(Node):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         # Create Detector
         self.get_logger().info("[AprlTag] detecting AprilTags...")
-        options = apriltag.DetectorOptions(families=self.tagtype)
-        detector = apriltag.Detector(options)
+        detector = apriltag.Detector(families=self.tagtype)
         results = detector.detect(gray)
         self.get_logger().info(f"[AprlTag] {len(results)} total AprilTags detected")
         # Process Apriltags and output data.
