@@ -7,5 +7,5 @@ git clone git@github.com:AprilRobotics/apriltag-imgs
 
 To generate custom apriltags, run
 ```
-ps2pdf custom-tags.ps
+make
 ```
