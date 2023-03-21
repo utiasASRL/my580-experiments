@@ -1,24 +1,32 @@
+BAG_OUTPUT = "april-trial2"
+
 ROS2_WS_LOCAL = "/home/asrl/research/my580ds/"
 ROS2_WS_DOCKER = "/my580_ros2_ws"
 
 DOCKER_VOLUMES = \
 	--volume="/tmp/.X11-unix:/tmp/.X11-unix"
+
 DOCKER_ENV_VARS = \
 	--env="NVIDIA_DRIVER_CAPABILITIES=all" \
 	--env="DISPLAY" \
 	--net=host --ipc=host \
 	-it --gpus all --privileged
+
 DOCKER_ARGS = ${DOCKER_ENV_VARS} ${DOCKER_VOLUMES} 
 
 ROS_APRIL_VOLUMES = \
-	--volume="${ROS2_WS_LOCAL}/src/tag_recog":"${ROS2_WS_DOCKER}/src/tag_recog":rw
+	--volume="${ROS2_WS_LOCAL}/src/apriltag_ros":"${ROS2_WS_DOCKER}/src/apriltag_ros":rw \
+	--volume="${ROS2_WS_LOCAL}/src/apriltag_msg":"${ROS2_WS_DOCKER}/src/apriltag_msg":rw \
+	--volume="${ROS2_WS_LOCAL}/apriltag":"${ROS2_WS_DOCKER}/apriltag":rw
 
-ROS_VOLUMES = ${ROS_APRIL_VOLUMES}\
+ROS_VOLUMES = ${ROS_APRIL_VOLUMES} \
 	--volume="${ROS2_WS_LOCAL}/ros2-vicon-receiver":"${ROS2_WS_DOCKER}/ros2-vicon-receiver":rw \
-	--volume="${ROS2_WS_LOCAL}/output":"${ROS2_WS_DOCKER}/output":rw
+	--volume="${ROS2_WS_LOCAL}/output":"${ROS2_WS_DOCKER}/output":rw \
+	--volume="${ROS2_WS_LOCAL}/config":"${ROS2_WS_DOCKER}/config":rw \
+	--volume="${ROS2_WS_LOCAL}/params":"${ROS2_WS_DOCKER}/params":rw \
+	--volume="${ROS2_WS_LOCAL}/scripts":"${ROS2_WS_DOCKER}/scripts":rw
 
-BAG_OUTPUT = "zed2-data"
-BAG_TOPICS = \
+BAG_TOPICS = -a #\
 	zed2/zed_node/left/camera_info \
 	zed2/zed_node/left/image_rect_color \
 	zed2/zed_node/left/image_rect_gray \
@@ -78,7 +86,15 @@ run-zed2:
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
 	--name "run-zed2" \
 	zed_ros2_built ros2 launch zed_wrapper zed2.launch.py
+	docker container stop "run-zed2" 
 	docker container rm -f "run-zed2" 
+
+run-zed2-term:
+	-docker container rm -f "run-zed2-term"
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-zed2-term" \
+	zed_ros2_built bash
+	docker container rm -f "run-zed2-term" 
 
 # Run vicon publisher
 run-vicon:
@@ -89,13 +105,20 @@ run-vicon:
 	"source ros2-vicon-receiver/vicon_receiver/install/local_setup.bash; ros2 launch vicon_receiver client.launch.py"
 	docker container rm -f "run-vicon"
 
+run-vicon-bash:
+	-docker container rm -f "run-vicon-bash"
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-vicon-bash" \
+	apriltag_vicon_overlay bash
+	docker container rm -f "run-vicon-bash"
+
 # Run visualization
 run-rviz:
 	xhost + 
 	-docker container rm -f "run-rviz" 
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
 	--name "run-rviz" --env "QT_DEBUG_PLUGINS=1" \
-	apriltag_vicon_overlay rviz2 -d rvizconfig.rviz
+	apriltag_vicon_overlay rviz2 -d config/aprilconfig.rviz
 	docker container rm -f "run-rviz"
 
 # Record bag file
@@ -103,13 +126,21 @@ run-bag-record:
 	-docker container rm -f "run-bag-record"
 	-docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
 	--name "run-bag-record" \
-	zed_ros2_built bash -c "cd output/; ros2 bag record -o ${BAG_OUTPUT} ${BAG_TOPICS}"
+	apriltag_backup bash -c "source ros2-vicon-receiver/vicon_receiver/install/local_setup.bash; cd output/; ros2 bag record -o ${BAG_OUTPUT} ${BAG_TOPICS}"
 	docker container rm -f "run-bag-record" 
 
 # Replay bag file
 run-bag-play:
-	-docker container rm -f "run-bag-play" 
+	-docker container rm -f "run-bag-play"  
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
 	--name "run-bag-play" \
 	zed_ros2_built bash -c "cd output/; ros2 bag play ${BAG_OUTPUT}"
 	docker container rm -f "run-bag-play" 
+
+run-apriltag-backup:
+	-docker container rm -f "run-apriltag-backup"  
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-apriltag-backup" \
+	apriltag_backup scripts/run_stereo_april.sh
+	docker container rm -f "run-apriltag-backup" 
+
