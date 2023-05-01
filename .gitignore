@@ -59,3 +59,7 @@ apriltags/*.pdf
 src/apriltag_msgs
 ros2-vicon-receiver
 output/
+
+## vim
+*.swp
+*.swo

@@ -1,23 +1,34 @@
 # Myhal580 dataset
 
-## Install intructions
+Software stack for recording stereo camera datasets in Myhal 580 with Vicon ground truth and apriltags.
 
-We use docker for running ros.
+## Local install instructions
+
+Can either use docker (see below), or a local install of robostack (ros environment that comes with nice python integrations)
+
+- install ros-humble-desktop using the [instructions](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
+- install ros-dev-tools
+
+
+## Docker install intructions
+
+You can also use docker for running ros.
 
 Current pipeline to install the hierarchy of docker images. 
 
 ```
-make build-zed-compiled # Compiles zed ros libraries
-make build-overlay # builds overlay 
+make build-zed-compiled
+make build-overlay
 ```
 
 ## Vicon instructions
-To create a new object, Press ALT and select all markers part of the object
 
-
+- To create a new object, Press ALT and select all markers part of the object
+- Need to create one object for the camera rig, and one object for all the apriltag markers. 
+- Export the apriltag markers as a vsk file in the end of the trial. This will be used to 
+get the individual marker locations (cannot be recovered from the gt poses published in ros)  
 
 ## Running instructions
-
 
 For default running, just run
 ```
@@ -41,4 +52,4 @@ make run-rviz
 
 ## Credits
 
--- [guide](https://roboticseabass.com/2021/04/21/docker-and-ros/) for the hierarchy of docker images.
+- [guide](https://roboticseabass.com/2021/04/21/docker-and-ros/) for the hierarchy of docker images.

@@ -26,6 +26,7 @@ ROS_VOLUMES = ${ROS_APRIL_VOLUMES} \
 	--volume="${ROS2_WS_LOCAL}/params":"${ROS2_WS_DOCKER}/params":rw \
 	--volume="${ROS2_WS_LOCAL}/scripts":"${ROS2_WS_DOCKER}/scripts":rw
 
+# TODO(FD): limit below to selected topics. 
 BAG_TOPICS = -a #\
 	zed2/zed_node/left/camera_info \
 	zed2/zed_node/left/image_rect_color \
@@ -63,6 +64,7 @@ build-apriltag:
 	docker commit container_tmp apriltag_overlay
 	docker container rm container_tmp 
 
+# build apriltag with vicon container
 build-apriltag-vicon:
 	-docker container rm -f container_tmp
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
@@ -74,11 +76,18 @@ build-apriltag-vicon:
 # RUN PARTS
 # Dev terminal for apriltag
 run-apriltag-term:
-	-docker container rm -f "run-apriltag-term"
-	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	-docker container rm -f "run-apriltag-term"  
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \ 
 	--name "run-apriltag-term" \
-	apriltag_overlay bash
-	docker container rm -f "run-apriltag-term" 
+	apriltag_backup bash 
+	docker container rm -f "run-apriltag-term"  
+
+run-apriltag-backup:
+	-docker container rm -f "run-apriltag-backup"  
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
+	--name "run-apriltag-backup" \
+	apriltag_backup scripts/run_stereo_april.sh
+	docker container rm -f "run-apriltag-backup" 
 
 # Run zed2 camera publisher
 run-zed2:
@@ -105,7 +114,7 @@ run-vicon:
 	"source ros2-vicon-receiver/vicon_receiver/install/local_setup.bash; ros2 launch vicon_receiver client.launch.py"
 	docker container rm -f "run-vicon"
 
-run-vicon-bash:
+run-vicon-term:
 	-docker container rm -f "run-vicon-bash"
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
 	--name "run-vicon-bash" \
@@ -134,13 +143,5 @@ run-bag-play:
 	-docker container rm -f "run-bag-play"  
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
 	--name "run-bag-play" \
-	zed_ros2_built bash -c "cd output/; ros2 bag play ${BAG_OUTPUT}"
+	apriltag_backup bash -c "source ros2-vicon-receiver/vicon_receiver/install/local_setup.bash; cd output/; ros2 bag play ${BAG_OUTPUT} ${extra_args}"
 	docker container rm -f "run-bag-play" 
-
-run-apriltag-backup:
-	-docker container rm -f "run-apriltag-backup"  
-	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
-	--name "run-apriltag-backup" \
-	apriltag_backup scripts/run_stereo_april.sh
-	docker container rm -f "run-apriltag-backup" 
-
