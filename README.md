@@ -39,7 +39,7 @@ For default experiments, just run
 docker/tmux_setup.sh
 ```
 
-This will create a nice layout of all different ros nodes. They can also be run individually by calling `make TARGET` where TARGET is the desired node, e.g. `make run-vicon`. See `[docker/Makefile](./docker/Makefile)` for all options.
+This will create a nice layout of all different ros nodes. They can also be run individually by calling `make TARGET` where TARGET is the desired node, e.g. `make run-vicon`. See [docker/Makefile](./docker/Makefile) for all options.
 
 
 ## Credits
