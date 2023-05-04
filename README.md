@@ -2,47 +2,31 @@
 
 Software stack for recording stereo camera datasets in Myhal 580 with Vicon ground truth and apriltags.
 
+Make sure to clone all the submodules (in workspace/src) by running
+
+```
+git clone --recurse-submodules git@github.com:utiasASRL/my580-experiments
+```
+
 ## High-level overview
 
-1. Standalone dockerfiles 
-
-To retrieve data from the stereo camera (zed2), we use a standalone docker image that runs foxy and the correct CUDA versions compatible with this laptop. To build this image, you need to run:
+We provide a docker image with all the basic dependencies, including CUDA support, the stereolabs libraries, and an install of ros2 foxy, using
 ```
 cd docker
-make build-zed2_ros
+make build-zed_ros
 ```
-because of CUDA runtime dependencies the make command is used rather than building the image directly from the dockerfile.
+During the image build, we also clone all submodules (see workspace/src) folder, and install all the required rosdeps. 
 
-To retrieve data from the UWB modules, run
+This base image is then run with all of the workspace folder mounted, and all the ros packages are built during run-time. Because the install/ and build/ folders are also shared, this process only takes long the first time. Also, because we use symlink-install, most code changes do not require a rebuild at all. When a rebuilt is required, simply run `make build-zed_ros` again and the build will be incremental. When the rosdep dependencies change, the changes need to be pushed to github so that they can be pulled in during image creation. 
+
+Finally, the UWB is built using
+
 ```
 cd docker
-make build-uwb_ros
-```
-
-2. local ROS environment
-
-
-## Local install instructions
-
-Can either use docker (see below), or a local install of robostack (ros environment that comes with nice python integrations)
-
-- install ros-humble-desktop using the [instructions](https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debians.html)
-- install ros-dev-tools
-
-
-## Docker install intructions
-
-You can also use docker for running ros.
-
-Current pipeline to install the hierarchy of docker images. 
-
-```
-make build-zed-compiled
-make build-overlay
+make build-uwb
 ```
 
 ## Vicon instructions
-
 - To create a new object, Press ALT and select all markers part of the object
 - Need to create one object for the camera rig, and one object for all the apriltag markers. 
 - Export the apriltag markers as a vsk file in the end of the trial. This will be used to 
@@ -50,26 +34,13 @@ get the individual marker locations (cannot be recovered from the gt poses publi
 
 ## Running instructions
 
-For default running, just run
+For default experiment running, just run
 ```
 docker/tmux_setup.sh
 ```
 
-The docker container to run for development is ros_terminal.
-```
-make run-ros-term
-```
+This will create a nice layout of all different ros nodes. They can also be run individually be calling `make TARGET` where TARGET is the desired node, e.g. `make run-vicon`. See `docker/Makefile` for all options.
 
-The following command starts the ZED 2 node in a separate container (zed2_publish):
-```
-make run-zed2
-```
-
-The following command opens rviz for visualization in s aseparate container (rviz_container)
-```
-make run-rviz
-```
 
 ## Credits
-
 - [guide](https://roboticseabass.com/2021/04/21/docker-and-ros/) for the hierarchy of docker images.
