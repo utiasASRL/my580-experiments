@@ -2,6 +2,26 @@
 
 Software stack for recording stereo camera datasets in Myhal 580 with Vicon ground truth and apriltags.
 
+## High-level overview
+
+1. Standalone dockerfiles 
+
+To retrieve data from the stereo camera (zed2), we use a standalone docker image that runs foxy and the correct CUDA versions compatible with this laptop. To build this image, you need to run:
+```
+cd docker
+make build-zed2_ros
+```
+because of CUDA runtime dependencies the make command is used rather than building the image directly from the dockerfile.
+
+To retrieve data from the UWB modules, run
+```
+cd docker
+make build-uwb_ros
+```
+
+2. local ROS environment
+
+
 ## Local install instructions
 
 Can either use docker (see below), or a local install of robostack (ros environment that comes with nice python integrations)

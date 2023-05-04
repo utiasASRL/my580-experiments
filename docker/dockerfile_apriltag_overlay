@@ -1,5 +1,0 @@
-FROM zed_ros2_built:latest
-
-# OpenCV
-RUN pip install opencv-python
-
