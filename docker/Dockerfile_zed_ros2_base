@@ -33,13 +33,13 @@ RUN rosdep init \
 
 # Install the zed-ros2 code.
 # IMPORTANT: 
-# - we need to check out the foxy version package because that's what the zed2 docker
-#   file is built on Ubuntu 20.
+# - we need to check out the foxy version because that's what the zed2 docker file is built on 
+#   (Ubuntu 20).
 # - for some reason, the library is now looking for libcuda.so.1 instead of libcuda.so.1, 
 #   so we temporarily create that symlink.
-# - however, these steps work only when running the image, because then we can 
-#   attach the cuda libraries correctly. We don't know how to do that at build time, 
-#   which is why we need the Makefile command.
+# - however, we still need certain libraries that are only created at runtime with the 
+#   correct CUDA bindings (see commented below), which is why we need the Makefile command
+#   make build-zed2_ros2
 SHELL ["/bin/bash", "-c"] # change default from /bin/sh to /bin/bash
 RUN sudo apt update && source /opt/ros/foxy/setup.bash \
 && mkdir -p "${ROS2_WS}/src" \
@@ -51,9 +51,14 @@ RUN sudo apt update && source /opt/ros/foxy/setup.bash \
 && rosdep install --from-paths src --ignore-src -r -y  \
 && ln -s /usr/local/cuda/lib64/stubs/libcuda.so /usr/local/cuda/lib64/stubs/libcuda.so.1 \
 #&& ln -s /usr/lib/x86_64-linux-gnu/libnvidia-encoda.so.1 ... doesn't work
-# we need to install zed_wrapper at runtime because of the CUDA dependency.
+# above doesn't work. we need to install zed_wrapper at runtime because of the CUDA dependency.
+# (the file libnvidia-encode is just a link to something created by CUDA at runtime)
 && LD_LIBRARY_PATH=/usr/local/cuda/lib64/stubs/:/usr/lib/x86_64-linux-gnu/:$LD_LIBRARY_PATH \
 && colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release --packages-select zed_interfaces zed_components \
+&& rm src/zed-ros2-wrapper/zed_wrapper/config/common.yaml \ 
+# we replace the common.yaml file with a symlink to a shared directory so that we can 
+# easily change it.
+&& ln -s "${ROS2_WS}/params/zed2-custom.yaml" src/zed-ros2-wrapper/zed_wrapper/config/common.yaml \
 && rm /usr/local/cuda/lib64/stubs/libcuda.so.1 \
 && rm -rf /var/lib/apt/lists/* 
 
