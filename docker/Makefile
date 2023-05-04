@@ -13,14 +13,14 @@ DOCKER_ENV_VARS = \
 	--env="DISPLAY" \
 	--net=host --ipc=host \
 	-it --gpus all --privileged \
-	--rm 
 
 DOCKER_ARGS = ${DOCKER_ENV_VARS} ${DOCKER_VOLUMES} 
 
 ROS_APRIL_VOLUMES = \
 	--volume="${ROS2_WS_LOCAL}/src/apriltag_ros":"${ROS2_WS_DOCKER}/src/apriltag_ros":rw \
 	--volume="${ROS2_WS_LOCAL}/src/apriltag_msg":"${ROS2_WS_DOCKER}/src/apriltag_msg":rw \
-	--volume="${ROS2_WS_LOCAL}/apriltag":"${ROS2_WS_DOCKER}/apriltag":rw
+	--volume="${ROS2_WS_LOCAL}/apriltag":"${ROS2_WS_DOCKER}/apriltag":rw  \
+	--rm
 
 ROS_VOLUMES = ${ROS_APRIL_VOLUMES} \
 	--volume="${ROS2_WS_LOCAL}/ros2-vicon-receiver":"${ROS2_WS_DOCKER}/ros2-vicon-receiver":rw \
@@ -49,12 +49,13 @@ BAG_TOPICS = -a #\
 
 # Run colcon inside the docker and save the updated image
 build-zed-compiled: 
-	docker build -f dockerfile_zed_ros2_base -t zed_ros2_base .
+	docker build -f dockerfile_zed_ros2_base -t zed_ros2_tmp .
 	docker run ${DOCKER_ARGS} \
 	--name container_tmp \
-	zed_ros2_base \
-	colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release
-	docker commit container_tmp zed_ros2_built
+	zed_ros2_tmp \
+	colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release --packages-select zed_wrapper
+	docker commit container_tmp zed_ros2
+	docker image rm zed_ros2_tmp
 
 # Build the apriltag recognition container
 build-apriltag:
@@ -94,7 +95,7 @@ run-zed2:
 
 run-zed2-term:
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} \
-	--name "run-zed2-term" \
+	--name "run-zed2-term2" \
 	zed_ros2_built bash
 
 # Run vicon publisher
