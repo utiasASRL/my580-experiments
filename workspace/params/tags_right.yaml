@@ -1,10 +1,10 @@
 apriltag:                 # node name
   ros__parameters:
-    frame_name: "left"   # which camera this tag corresponds to
+    frame_name: "right"  # which camera this tag corresponds to
     # setup (defaults)
     image_transport: raw  # image format: "raw" or "compressed"
-    family: Custom48h12   # tag family name: 16h5, 25h9, 36h11
-    size: 0.1043             # default tag edge size in meter
+    family: 36h11   # tag family name: 16h5, 25h9, 36h11 Custom48h12
+    size: 0.23             # default tag edge size in meter
     profile: false        # print profiling information to stdout
 
     # tuning of detection (defaults)
