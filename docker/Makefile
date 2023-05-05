@@ -1,4 +1,4 @@
-BAG_OUTPUT = "test"
+BAG_OUTPUT = "test2"
 
 ROS2_WS_LOCAL = "/home/asrl/research/my580-experiments/workspace"
 ROS2_WS_DOCKER = "/home/ros/my580_ros2_ws/workspace"
@@ -44,8 +44,24 @@ DOCKER_ARGS = ${DOCKER_ENV_VARS} ${DOCKER_VOLUMES}
 ROS_VOLUMES = \
 	--volume="${ROS2_WS_LOCAL}":"${ROS2_WS_DOCKER}":rw
 
+
+kill:
+	-docker container rm --force run-zed2
+	-docker container rm --force run-zed2-tmp
+	-docker container rm --force run-zed2-term
+	-docker container rm --force run-uwb
+	-docker container rm --force run-april-left
+	-docker container rm --force run-april-right
+	-docker container rm --force run-rviz
+	-docker container rm --force run-vicon
+	-docker container rm --force run-bag-play
+	-docker container rm --force run-bag-record
+	-tmux detach-client
+	-tmux kill-session -t my580
+
+
 build-zed_ros2: 
-	docker build -f Dockerfile_zed_ros2_base -t zed_ros2_tmp .
+	docker build -f Dockerfile -t zed_ros2_tmp .
 	-docker container rm container_tmp
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --name container_tmp \
 		zed_ros2_tmp bash -c "colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release"
@@ -54,11 +70,6 @@ build-zed_ros2:
 
 build-uwb:
 	docker build -t uwb_ros ${ROS2_WS_LOCAL}/src/uwb_ros2/
-
-run-tmp:
-	-docker container rm "run-zed2-tmp"
-	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-zed2-tmp" \
-		zed_ros2_tmp bash
 
 run-devel:
 	-docker container rm "run-zed2-term"
@@ -76,12 +87,12 @@ run-zed2:
 run-april-left:
 	-docker container rm "run-april-left"
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-april-left" \
-		zed_ros2 scripts/run_stereo_april.sh
+		zed_ros2 bash -c "scripts/run_april_left.sh"
 
 run-april-right:
 	-docker container rm "run-april-right"
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-april-right" \
-		zed_ros2 scripts/run_stereo_april.sh
+		zed_ros2 bash -c "scripts/run_april_right.sh"
 
 run-rviz:
 	-docker container rm "run-rviz"

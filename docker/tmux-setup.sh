@@ -14,6 +14,14 @@ tmux send-keys -t $session:$window 'make run-vicon' C-m
 tmux split-window -h
 tmux send-keys -t $session:$window 'make run-uwb' C-m
 
+tmux select-pane -t 0
+
+tmux split-window -h
+tmux send-keys -t $session:$window 'make run-april-left' C-m
+
+tmux split-window -v
+tmux send-keys -t $session:$window 'make run-april-right' C-m
+
 # background window: do not need to look at this much
 window=1
 tmux new-window -t $session:$window -n 'background'
@@ -22,5 +30,7 @@ tmux send-keys -t $session:$window 'make run-rviz' C-m
 # last: start recording bag file.
 tmux split-window -v 
 tmux send-keys -t $session:$window 'make run-bag-record' C-m
+
+tmux select-window -t $session:0
 
 tmux attach-session -t $session
