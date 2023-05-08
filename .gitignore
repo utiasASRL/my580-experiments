@@ -52,12 +52,9 @@ CATKIN_IGNORE
 
 ## custom additions
 __pycache__
-
-## 
 apriltags/apriltag-imgs
 apriltags/*.pdf
-src/apriltag_msgs
-output/
+workspace/output/
 
 ## vim
 *.swp

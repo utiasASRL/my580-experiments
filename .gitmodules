@@ -1,3 +1,15 @@
-[submodule "ros2-vicon-receiver"]
-	path = ros2-vicon-receiver
-	url = https://github.com/utiasASRL/ros2-vicon-receiver.git
+[submodule "uwb_ros2"]
+	path = uwb_ros2
+	url = git@github.com:CharlesCossette/uwb_ros2
+[submodule "workspace/src/apriltag_ros"]
+	path = workspace/src/apriltag_ros
+	url = git@github.com:christianrauch/apriltag_ros
+[submodule "workspace/src/apriltag_msgs"]
+	path = workspace/src/apriltag_msgs
+	url = git@github.com:christianrauch/apriltag_msgs
+[submodule "workspace/src/zed-ros2-wrapper"]
+	path = workspace/src/zed-ros2-wrapper
+	url = git@github.com:stereolabs/zed-ros2-wrapper
+[submodule "workspace/src/ros2-vicon-receiver"]
+	path = workspace/src/ros2-vicon-receiver
+	url = git@github.com:utiasASRL/ros2-vicon-receiver

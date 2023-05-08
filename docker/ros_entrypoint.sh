@@ -1,16 +1,16 @@
 #!/bin/bash
 
 # Source ROS and Catkin workspaces
-source "/opt/ros/${ROS_DISTRO}/setup.bash"
-echo "success: source /opt/ros/${ROS_DISTRO}/setup.bash"
-
-if [ -f "${ROS2_WS}/install/local_setup.bash" ]
-then
-  source "${ROS2_WS}/install/local_setup.bash"
-  echo "success: source ${ROS2_WS}/install/local_setup.bash"
-else
-  echo "Note: ${ROS2_WS}/install/local_setup.bash does not exist yet."
-fi
+for FNAME in "/opt/ros/${ROS_DISTRO}/setup.bash" "/home/ros/my580_ros2_ws/workspace/install/local_setup.bash"
+do
+  if [ -f "${FNAME}" ]
+  then 
+    source "${FNAME}"
+    echo "success: source ${FNAME}"
+  else
+    echo "Note: could not source ${FNAME}"
+  fi
+done 
 
 # Execute the command passed into this entrypoint
 exec "$@"
