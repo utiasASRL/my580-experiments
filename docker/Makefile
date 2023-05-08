@@ -106,6 +106,11 @@ run-vicon:
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-vicon" \
 		zed_ros2 ros2 launch vicon_receiver client.launch.py
 
+vicon-term:
+	-docker container rm "run-vicon"
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-vicon" \
+		zed_ros2 /bin/bash
+
 # Record bag file
 run-bag-record: 
 	-docker container rm --force "run-bag-record"
