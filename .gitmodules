@@ -13,3 +13,6 @@
 [submodule "workspace/src/ros2-vicon-receiver"]
 	path = workspace/src/ros2-vicon-receiver
 	url = git@github.com:utiasASRL/ros2-vicon-receiver
+[submodule "workspace/src/uwb_ros2"]
+	path = workspace/src/uwb_ros2
+	url = git@github.com:CharlesCossette/uwb_ros2
