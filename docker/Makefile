@@ -77,6 +77,7 @@ run-devel:
 		zed_ros2 bash
 
 run-uwb:
+	-docker container rm "run-uwb"
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-uwb" \
 		uwb_ros 
 
