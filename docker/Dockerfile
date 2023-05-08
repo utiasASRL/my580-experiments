@@ -43,8 +43,8 @@ RUN sudo apt update && source /opt/ros/foxy/setup.bash \
   && mkdir -p "${ROS2_WS}/src" \
   && cd "${ROS2_WS}/src" \
   && git clone --recursive https://github.com/stereolabs/zed-ros2-wrapper.git \
-  && git clone --recursive https://github.com/christianrauch/apriltag_ros.git \
   && git clone --recursive https://github.com/christianrauch/apriltag_msgs.git \
+  && git clone --recursive https://github.com/christianrauch/apriltag_ros.git \
   && cd zed-ros2-wrapper \
   && git checkout foxy-humble-v3.8.2 \
   && cd ../.. \
@@ -53,6 +53,10 @@ RUN sudo apt update && source /opt/ros/foxy/setup.bash \
   && git clone --recursive https://github.com/utiasASRL/ros2-vicon-receiver.git \
   && cd ros2-vicon-receiver \
   && ./install_libs.sh \
+  && cd "${ROS2_WS}/src" \
+  && git clone --recursive https://github.com/CharlesCossette/uwb_ros2.git \
+  && cd uwb_ros2/uwb_driver \
+  && pip3 install . \
   && rm -rf "${ROS2_WS}/src"  \
   && rm -rf /var/lib/apt/lists/* 
 

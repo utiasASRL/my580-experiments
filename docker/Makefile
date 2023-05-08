@@ -1,17 +1,19 @@
-BAG_OUTPUT = "test2"
+BAG_OUTPUT = "test1"
 
 ROS2_WS_LOCAL = "/home/asrl/research/my580-experiments/workspace"
 ROS2_WS_DOCKER = "/home/ros/my580_ros2_ws/workspace"
 
 DOCKER_VOLUMES = \
 	--volume="/tmp/.X11-unix:/tmp/.X11-unix" \
-	--volume="/dev:/dev"
 
+# We removed --net=host below because it seems to be incompatible 
+# with this docker image
 DOCKER_ENV_VARS = \
 	--env="NVIDIA_DRIVER_CAPABILITIES=all" \
+	--ipc=host \
 	--env="DISPLAY" \
-	--net=host --ipc=host \
-	-it --gpus all --privileged 
+	--gpus all \
+	-it --privileged 
 
 BAG_TOPICS = \
 	zed2/zed_node/left/camera_info \
@@ -38,6 +40,11 @@ BAG_TOPICS = \
 	diagnostics \
 	detections/left \
 	detections/right \
+        uwb/range \
+        tf/ \
+        tf_static/ \
+        vicon/robot/robot \
+        vicon/environment/environment
 
 DOCKER_ARGS = ${DOCKER_ENV_VARS} ${DOCKER_VOLUMES} 
 
@@ -78,8 +85,7 @@ run-devel:
 
 run-uwb:
 	-docker container rm "run-uwb"
-	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-uwb" \
-		uwb_ros 
+	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-uwb" zed_ros2 bash -c "ros2 run uwb_driver uwb_node --ros-args --params-file src/uwb_ros2/uwb_driver/config/params.yaml"
 
 run-zed2:
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-zed2" \
