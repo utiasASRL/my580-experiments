@@ -55,6 +55,7 @@ __pycache__
 apriltags/apriltag-imgs
 apriltags/*.pdf
 workspace/output/
+.vscode
 
 ## vim
 *.swp
