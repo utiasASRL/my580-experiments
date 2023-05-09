@@ -1,4 +1,4 @@
-BAG_OUTPUT = "test1"
+BAG_OUTPUT = "2023-05-08-T17-03"
 
 ROS2_WS_LOCAL = "/home/asrl/research/my580-experiments/workspace"
 ROS2_WS_DOCKER = "/home/ros/my580_ros2_ws/workspace"
@@ -16,35 +16,35 @@ DOCKER_ENV_VARS = \
 	-it --privileged 
 
 BAG_TOPICS = \
-	zed2/zed_node/left/camera_info \
-	zed2/zed_node/left/image_rect_color \
-	zed2/zed_node/left/image_rect_gray \
-	zed2/zed_node/left_raw/camera_info \
-	zed2/zed_node/left_raw/image_rect_color \
-	zed2/zed_node/left_raw/image_rect_gray \
-	zed2/zed_node/right/camera_info \
-	zed2/zed_node/right/image_rect_color \
-	zed2/zed_node/right/image_rect_gray \
-	zed2/zed_node/right_raw/camera_info \
-	zed2/zed_node/right_raw/image_rect_color \
-	zed2/zed_node/right_raw/image_rect_gray \
-	zed2/zed_node/disparity/disparity_image \
-	zed2/zed_node/depth/depth_registered \
-	zed2/zed_node/odom \
-	zed2/zed_node/pose_with_covariance \
-	zed2/zed_node/imu/data \
-	zed2/zed_node/imu/data_raw \
-	zed2/zed_node/imu/mag \
-	zed2/zed_node/atm_press \
-	zed2/zed_node/left_cam_imu_transform \
+	zed2i/zed_node/left/camera_info \
+	zed2i/zed_node/left/image_rect_color \
+	zed2i/zed_node/left/image_rect_gray \
+	zed2i/zed_node/left_raw/camera_info \
+	zed2i/zed_node/left_raw/image_rect_color \
+	zed2i/zed_node/left_raw/image_rect_gray \
+	zed2i/zed_node/right/camera_info \
+	zed2i/zed_node/right/image_rect_color \
+	zed2i/zed_node/right/image_rect_gray \
+	zed2i/zed_node/right_raw/camera_info \
+	zed2i/zed_node/right_raw/image_rect_color \
+	zed2i/zed_node/right_raw/image_rect_gray \
+	zed2i/zed_node/disparity/disparity_image \
+	zed2i/zed_node/depth/depth_registered \
+	zed2i/zed_node/odom \
+	zed2i/zed_node/pose_with_covariance \
+	zed2i/zed_node/imu/data \
+	zed2i/zed_node/imu/data_raw \
+	zed2i/zed_node/imu/mag \
+	zed2i/zed_node/atm_press \
+	zed2i/zed_node/left_cam_imu_transform \
 	diagnostics \
 	detections/left \
 	detections/right \
-        uwb/range \
-        tf/ \
-        tf_static/ \
-        vicon/robot/robot \
-        vicon/environment/environment
+  uwb/range \
+  tf \
+  tf_static \
+  vicon/robot/robot \
+  vicon/environment/environment
 
 DOCKER_ARGS = ${DOCKER_ENV_VARS} ${DOCKER_VOLUMES} 
 
@@ -89,7 +89,7 @@ run-uwb:
 
 run-zed2:
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-zed2" \
-		zed_ros2 ros2 launch zed_wrapper zed2.launch.py
+		zed_ros2 ros2 launch zed_wrapper zed2i.launch.py
 
 run-april-left:
 	-docker container rm "run-april-left"
