@@ -1,6 +1,9 @@
-#BAG_OUTPUT = "2023-05-08-T17-03"
-#BAG_OUTPUT = "2023-05-09-T18-13"
-BAG_OUTPUT = "2023-05-10-T10-20"
+#BAG_OUTPUT = "2023-05-10-T16-05-loop-2d-v2"
+#BAG_OUTPUT = "2023-05-10-T16-08-loop-2d-fast-v2"
+BAG_OUTPUT = "2023-05-10-T16-16-loop-3d-v2"
+#BAG_OUTPUT = "2023-05-10-TXX-XX-zigzag"
+#BAG_OUTPUT = "2023-05-10-TXX-XX-nlos-static"
+#BAG_OUTPUT = "2023-05-10-TXX-XX-nlos-dynamic"
 
 ROS2_WS_LOCAL = "/home/asrl/research/my580-experiments/workspace"
 ROS2_WS_DOCKER = "/home/asrl/research/my580-experiments/workspace"
