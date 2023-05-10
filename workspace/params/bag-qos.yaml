@@ -3,6 +3,7 @@
   durability: volatile #transient_local # keep samples for late joining subscribers
   reliability: reliable # may retry multiple times to guarantee samples are delivered
   history: keep_last #keep_all # do not drop any samples
+  depth: 10 # number of samples to keep
   lifespan: # after this time a message is silently dropped if not received
     sec: 100000000
     nsec: 0
@@ -10,6 +11,7 @@
   durability: volatile #transient_local # keep samples for late joining subscribers
   reliability: reliable # may retry multiple times to guarantee samples are delivered
   history: keep_last #keep_all # do not drop any samples 
+  depth: 10 # number of samples to keep
   lifespan: # after this time a message is silently dropped if not received
     sec: 100000000
     nsec: 0

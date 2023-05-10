@@ -1,6 +1,6 @@
 #BAG_OUTPUT = "2023-05-08-T17-03"
 #BAG_OUTPUT = "2023-05-09-T18-13"
-BAG_OUTPUT = "all-compressed-qos"
+BAG_OUTPUT = "2023-05-09-T21-36"
 
 ROS2_WS_LOCAL = "/home/asrl/research/my580-experiments/workspace"
 ROS2_WS_DOCKER = "/home/asrl/research/my580-experiments/workspace"
