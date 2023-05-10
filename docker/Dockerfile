@@ -5,7 +5,7 @@ ENV LOGNAME root
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV ROS_DISTRO "foxy"
-ENV ROS2_WS "/home/ros/my580_ros2_ws"
+ENV ROS2_WS "/home/asrl/research/my580-experiments"
 
 RUN apt-get update || true && apt-get install -q -y --no-install-recommends \
     bash-completion \
@@ -26,6 +26,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     python3-rosdep \
     python3-vcstool \
     ros-foxy-desktop \
+    ros-foxy-image-transport-plugins \
+    ros-foxy-theora-image-transport \
+    ros-foxy-compressed-depth-image-transport \
+    ros-foxy-compressed-image-transport \
     && rm -rf /var/lib/apt/lists/*
 
 RUN rosdep init \

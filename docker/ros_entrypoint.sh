@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Source ROS and Catkin workspaces
-for FNAME in "/opt/ros/${ROS_DISTRO}/setup.bash" "/home/ros/my580_ros2_ws/workspace/install/local_setup.bash"
+for FNAME in "/opt/ros/${ROS_DISTRO}/setup.bash" "/home/asrl/research/my580-experiments/workspace/install/local_setup.bash"
 do
   if [ -f "${FNAME}" ]
   then 

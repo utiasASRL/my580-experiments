@@ -1,0 +1,15 @@
+# see https://docs.ros.org/en/foxy/Concepts/About-Quality-of-Service-Settings.html for details
+/zed2i/zed_node/left/image_rect_color/compressed:
+  durability: volatile #transient_local # keep samples for late joining subscribers
+  reliability: reliable # may retry multiple times to guarantee samples are delivered
+  history: keep_last #keep_all # do not drop any samples
+  lifespan: # after this time a message is silently dropped if not received
+    sec: 100000000
+    nsec: 0
+/zed2i/zed_node/right/image_rect_color/compressed:
+  durability: volatile #transient_local # keep samples for late joining subscribers
+  reliability: reliable # may retry multiple times to guarantee samples are delivered
+  history: keep_last #keep_all # do not drop any samples 
+  lifespan: # after this time a message is silently dropped if not received
+    sec: 100000000
+    nsec: 0

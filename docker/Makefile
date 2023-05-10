@@ -1,7 +1,9 @@
-BAG_OUTPUT = "2023-05-08-T17-03"
+#BAG_OUTPUT = "2023-05-08-T17-03"
+#BAG_OUTPUT = "2023-05-09-T18-13"
+BAG_OUTPUT = "all-compressed-qos"
 
 ROS2_WS_LOCAL = "/home/asrl/research/my580-experiments/workspace"
-ROS2_WS_DOCKER = "/home/ros/my580_ros2_ws/workspace"
+ROS2_WS_DOCKER = "/home/asrl/research/my580-experiments/workspace"
 
 DOCKER_VOLUMES = \
 	--volume="/tmp/.X11-unix:/tmp/.X11-unix" \
@@ -15,25 +17,19 @@ DOCKER_ENV_VARS = \
 	--gpus all \
 	-it --privileged 
 
+#BAG_TOPICS = \
+	zed2i/zed_node/right/image_rect_color/compressed \
+	zed2i/zed_node/left/image_rect_color/compressed \
+	zed2i/zed_node/imu/data 
+
 BAG_TOPICS = \
 	zed2i/zed_node/left/camera_info \
-	zed2i/zed_node/left/image_rect_color \
-	zed2i/zed_node/left/image_rect_gray \
-	zed2i/zed_node/left_raw/camera_info \
-	zed2i/zed_node/left_raw/image_rect_color \
-	zed2i/zed_node/left_raw/image_rect_gray \
+	zed2i/zed_node/left/image_rect_color/compressed \
 	zed2i/zed_node/right/camera_info \
-	zed2i/zed_node/right/image_rect_color \
-	zed2i/zed_node/right/image_rect_gray \
-	zed2i/zed_node/right_raw/camera_info \
-	zed2i/zed_node/right_raw/image_rect_color \
-	zed2i/zed_node/right_raw/image_rect_gray \
-	zed2i/zed_node/disparity/disparity_image \
-	zed2i/zed_node/depth/depth_registered \
+	zed2i/zed_node/right/image_rect_color/compressed \
 	zed2i/zed_node/odom \
 	zed2i/zed_node/pose_with_covariance \
 	zed2i/zed_node/imu/data \
-	zed2i/zed_node/imu/data_raw \
 	zed2i/zed_node/imu/mag \
 	zed2i/zed_node/atm_press \
 	zed2i/zed_node/left_cam_imu_transform \
@@ -71,7 +67,7 @@ build-zed_ros2:
 	docker build -f Dockerfile -t zed_ros2_tmp .
 	-docker container rm container_tmp
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --name container_tmp \
-		zed_ros2_tmp bash -c "colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release"
+		zed_ros2_tmp bash -c "colcon build --cmake-args=-DCMAKE_BUILD_TYPE=Release"
 	docker commit container_tmp zed_ros2
 	-docker container rm container_tmp
 
@@ -122,10 +118,10 @@ vicon-term:
 run-bag-record: 
 	-docker container rm --force "run-bag-record"
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-bag-record" \
-		zed_ros2 bash -c "cd output/; ros2 bag record -o ${BAG_OUTPUT} ${BAG_TOPICS}"
+		zed_ros2 bash -c "cd output/; ros2 bag record -o ${BAG_OUTPUT} ${BAG_TOPICS} --qos-profile-overrides-path ../params/bag-qos.yaml"
 
 # Replay bag file
 run-bag-play:
 	-docker container rm "run-bag-play"
 	docker run ${DOCKER_ARGS} ${ROS_VOLUMES} --rm --name "run-bag-play" \
-		zed_ros2 bash -c "cd output/; ros2 bag play ${BAG_OUTPUT} ${extra_args};"
+		zed_ros2 bash -c "cd output/; ros2 bag play -l ${BAG_OUTPUT} ${extra_args} --qos-profile-overrides-path ../params/bag-qos.yaml;"

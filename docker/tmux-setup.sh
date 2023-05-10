@@ -29,7 +29,7 @@ tmux send-keys -t $session:$window 'make run-rviz' C-m
 
 # last: start recording bag file.
 tmux split-window -v 
-tmux send-keys -t $session:$window 'make run-bag-record' C-m
+#tmux send-keys -t $session:$window 'make run-bag-record' C-m
 
 tmux select-window -t $session:0
 
