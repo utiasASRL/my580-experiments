@@ -9,7 +9,7 @@
 	url = git@github.com:christianrauch/apriltag_msgs
 [submodule "workspace/src/zed-ros2-wrapper"]
 	path = workspace/src/zed-ros2-wrapper
-	url = git@github.com:stereolabs/zed-ros2-wrapper
+	url = git@github.com:duembgen/zed-ros2-wrapper
 [submodule "workspace/src/ros2-vicon-receiver"]
 	path = workspace/src/ros2-vicon-receiver
 	url = git@github.com:utiasASRL/ros2-vicon-receiver
