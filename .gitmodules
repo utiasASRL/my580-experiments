@@ -3,7 +3,7 @@
 	url = git@github.com:CharlesCossette/uwb_ros2
 [submodule "workspace/src/apriltag_ros"]
 	path = workspace/src/apriltag_ros
-	url = git@github.com:christianrauch/apriltag_ros
+	url = git@github.com:duembgen/apriltag_ros
 [submodule "workspace/src/apriltag_msgs"]
 	path = workspace/src/apriltag_msgs
 	url = git@github.com:christianrauch/apriltag_msgs
