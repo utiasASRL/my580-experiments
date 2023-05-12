@@ -12,7 +12,8 @@ tmux split-window -v
 tmux send-keys -t $session:$window 'make run-vicon' C-m
 
 tmux split-window -h
-tmux send-keys -t $session:$window 'make run-uwb' C-m
+#tmux send-keys -t $session:$window 'make run-uwb' C-m
+#python ../workspace/src/distancemeasurer.py
 
 tmux select-pane -t 0
 

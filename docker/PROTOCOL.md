@@ -55,5 +55,9 @@ Jackal:
 
 tag 32 moved a bit after loop3d, moved it back manually using mocap as guide
 - all other experiments went smoothly
+- apriltag: slow apriltag dataset where we make sure we definitely see all 
 
 after lunch: replace UWB markers with Decawave ones
+- decawave: loop
+- decawave-v2: loop2
+- dwm-loop-3d-v3: dataset with vertical motion
