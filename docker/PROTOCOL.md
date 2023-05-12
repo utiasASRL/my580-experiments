@@ -44,3 +44,16 @@ Jackal:
 - zigzag: all data recorded (manual drive) and video stopped after 30 seconds.
 
 # Dataset collection Friday May 12
+
+- loop2d-tag1-nlos: no UWB
+- loop2d-tag1-nlos-v2: no mocap
+- loop2d-tag1-nlos-v3: all good, but not great nlos
+- grid
+- ell
+- loop-3d
+- nlos2
+
+tag 32 moved a bit after loop3d, moved it back manually using mocap as guide
+- all other experiments went smoothly
+
+after lunch: replace UWB markers with Decawave ones

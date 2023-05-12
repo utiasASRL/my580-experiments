@@ -3,11 +3,21 @@ BAG_OUTPUT = "2023-05-10-T16-08-loop-2d-fast-v2"
 BAG_OUTPUT = "2023-05-10-T16-16-loop-3d-v2"
 #BAG_OUTPUT = "2023-05-10-T17-29-los-v3"
 
-#BAG_OUTPUT = "2023-05-10-T18-25-loop-2d-v3"
-#BAG_OUTPUT = "2023-05-10-T18-25-loop-2d-fast-v3"
-#BAG_OUTPUT = "2023-05-10-T18-25-loop-3d-v3"
-#BAG_OUTPUT = "2023-05-10-T18-25-zigzag"
-BAG_OUTPUT = "2023-05-10-T18-25-eight"
+#BAG_OUTPUT = "2023-05-11-T16-15-loop-2d-1tag-v2"
+#BAG_OUTPUT = "2023-05-11-T16-15-loop-2d-fast-1tag"
+#BAG_OUTPUT = "2023-05-11-T16-15-loop-3d-1tag"
+#BAG_OUTPUT = "2023-05-11-T16-15-zigzag-1tag"
+#BAG_OUTPUT = "2023-05-11-T16-15-eight-1tag"
+#BAG_OUTPUT = "2023-05-11-T16-15-eight-1tag-v2"
+#BAG_OUTPUT = "2023-05-11-T16-15-eight-1tag-v2"
+
+#BAG_OUTPUT = "2023-05-12-T11-20-loop-2d-1tag-nlos"
+#BAG_OUTPUT = "2023-05-12-T11-20-uwb-test2"
+#BAG_OUTPUT = "2023-05-12-T11-20-loop-2d-1tag-nlos-v3"
+#BAG_OUTPUT = "2023-05-12-T11-20-ell"
+#BAG_OUTPUT = "2023-05-12-T11-20-loop-3d"
+#BAG_OUTPUT = "2023-05-12-T11-20-human-nlos"
+BAG_OUTPUT = "2023-05-12-T11-20-apriltag"
 
 ROS2_WS_LOCAL = "/home/asrl/research/my580-experiments/workspace"
 ROS2_WS_DOCKER = "/home/asrl/research/my580-experiments/workspace"
@@ -48,7 +58,9 @@ BAG_TOPICS = \
   tf_static \
   vicon/robot/robot \
   vicon/environment/environment \
-  vicon/uwb_markers/uwb_markers
+  vicon/uwb_markers/uwb_markers \
+	vicon/obstacle/obstacle
+
 
 DOCKER_ARGS = ${DOCKER_ENV_VARS} ${DOCKER_VOLUMES} 
 
