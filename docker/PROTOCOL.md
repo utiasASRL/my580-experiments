@@ -26,3 +26,21 @@ also recorded zigzag and eight for the first time.
 
 observations from second round: probably a lot of nlos for tag10
 tag6 tilted a little bit
+
+# Dataset collection Thursday May 11
+
+- Redid Mocap calibration, noticed cam 7 is faulty, so disabled it. 
+- Moved a lot of landmarks and also placed anchor 9 on a plastic mount.
+
+-loop-2d-1tag: walked clockwise instead of counter-clockwise (so probably not seeing many apriltags)
+-loop-2d-ttag-v2: clockwise
+-...
+-first eight: UWB crashed, no data
+-eight-v2: with UWB
+
+Jackal: 
+- loop: no UWB data, but camera data okay, have video. Teach step, pause for 2 minutes, then 3 loops.
+- loop-v2: all data recorded, no video. Repeat step: 2.5 loops, then VTR crashed because out of memory. 
+- zigzag: all data recorded (manual drive) and video stopped after 30 seconds.
+
+# Dataset collection Friday May 12
