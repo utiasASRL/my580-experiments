@@ -130,27 +130,67 @@ Visualization Manager:
         All Enabled: false
         base_link:
           Value: false
-        map:
-          Value: false
-        odom:
-          Value: false
+        robot:
+          Value: true
+        tag36h11:10:left:
+          Value: true
         tag36h11:10:right:
           Value: true
         tag36h11:11:left:
           Value: true
         tag36h11:11:right:
           Value: true
+        tag36h11:12:left:
+          Value: true
+        tag36h11:12:right:
+          Value: true
+        tag36h11:13:left:
+          Value: true
+        tag36h11:13:right:
+          Value: true
+        tag36h11:14:left:
+          Value: true
+        tag36h11:14:right:
+          Value: true
+        tag36h11:15:left:
+          Value: true
+        tag36h11:15:right:
+          Value: true
         tag36h11:16:left:
           Value: true
         tag36h11:16:right:
           Value: true
+        tag36h11:17:left:
+          Value: true
+        tag36h11:17:right:
+          Value: true
+        tag36h11:18:left:
+          Value: true
+        tag36h11:18:right:
+          Value: true
         tag36h11:19:left:
+          Value: true
+        tag36h11:19:right:
           Value: true
         tag36h11:1:left:
           Value: true
         tag36h11:1:right:
           Value: true
+        tag36h11:20:left:
+          Value: true
+        tag36h11:20:right:
+          Value: true
         tag36h11:21:left:
+          Value: true
+        tag36h11:21:right:
+          Value: true
+        tag36h11:22:left:
+          Value: true
+        tag36h11:22:right:
+          Value: true
+        tag36h11:23:left:
+          Value: true
+        tag36h11:23:right:
           Value: true
         tag36h11:24:left:
           Value: true
@@ -168,9 +208,25 @@ Visualization Manager:
           Value: true
         tag36h11:27:right:
           Value: true
+        tag36h11:28:left:
+          Value: true
+        tag36h11:28:right:
+          Value: true
+        tag36h11:29:left:
+          Value: true
+        tag36h11:29:right:
+          Value: true
+        tag36h11:2:left:
+          Value: true
+        tag36h11:2:right:
+          Value: true
         tag36h11:30:left:
           Value: true
         tag36h11:30:right:
+          Value: true
+        tag36h11:31:left:
+          Value: true
+        tag36h11:31:right:
           Value: true
         tag36h11:32:left:
           Value: true
@@ -203,6 +259,10 @@ Visualization Manager:
         tag36h11:39:left:
           Value: true
         tag36h11:39:right:
+          Value: true
+        tag36h11:3:left:
+          Value: true
+        tag36h11:3:right:
           Value: true
         tag36h11:40:left:
           Value: true
@@ -244,17 +304,53 @@ Visualization Manager:
           Value: true
         tag36h11:49:right:
           Value: true
+        tag36h11:4:left:
+          Value: true
+        tag36h11:4:right:
+          Value: true
+        tag36h11:50:left:
+          Value: true
+        tag36h11:50:right:
+          Value: true
+        tag36h11:51:left:
+          Value: true
+        tag36h11:51:right:
+          Value: true
         tag36h11:52:left:
           Value: true
         tag36h11:52:right:
+          Value: true
+        tag36h11:53:left:
+          Value: true
+        tag36h11:53:right:
+          Value: true
+        tag36h11:54:left:
+          Value: true
+        tag36h11:54:right:
+          Value: true
+        tag36h11:55:left:
+          Value: true
+        tag36h11:55:right:
+          Value: true
+        tag36h11:5:left:
+          Value: true
+        tag36h11:5:right:
+          Value: true
+        tag36h11:6:left:
+          Value: true
+        tag36h11:6:right:
           Value: true
         tag36h11:7:left:
           Value: true
         tag36h11:7:right:
           Value: true
-        vicon_object:
+        tag36h11:8:left:
           Value: true
-        world:
+        tag36h11:8:right:
+          Value: true
+        tag36h11:9:left:
+          Value: true
+        tag36h11:9:right:
           Value: true
         zed2i_base_link:
           Value: false
@@ -277,21 +373,43 @@ Visualization Manager:
       Show Names: false
       Tree:
         base_link:
+          robot:
+            {}
           zed2i_base_link:
             zed2i_camera_center:
               zed2i_left_camera_frame:
                 zed2i_imu_link:
                   {}
                 zed2i_left_camera_optical_frame:
+                  tag36h11:10:left:
+                    {}
                   tag36h11:11:left:
                     {}
+                  tag36h11:12:left:
+                    {}
+                  tag36h11:13:left:
+                    {}
+                  tag36h11:14:left:
+                    {}
+                  tag36h11:15:left:
+                    {}
                   tag36h11:16:left:
+                    {}
+                  tag36h11:17:left:
+                    {}
+                  tag36h11:18:left:
                     {}
                   tag36h11:19:left:
                     {}
                   tag36h11:1:left:
                     {}
+                  tag36h11:20:left:
+                    {}
                   tag36h11:21:left:
+                    {}
+                  tag36h11:22:left:
+                    {}
+                  tag36h11:23:left:
                     {}
                   tag36h11:24:left:
                     {}
@@ -301,7 +419,15 @@ Visualization Manager:
                     {}
                   tag36h11:27:left:
                     {}
+                  tag36h11:28:left:
+                    {}
+                  tag36h11:29:left:
+                    {}
+                  tag36h11:2:left:
+                    {}
                   tag36h11:30:left:
+                    {}
+                  tag36h11:31:left:
                     {}
                   tag36h11:32:left:
                     {}
@@ -318,6 +444,8 @@ Visualization Manager:
                   tag36h11:38:left:
                     {}
                   tag36h11:39:left:
+                    {}
+                  tag36h11:3:left:
                     {}
                   tag36h11:40:left:
                     {}
@@ -339,9 +467,29 @@ Visualization Manager:
                     {}
                   tag36h11:49:left:
                     {}
+                  tag36h11:4:left:
+                    {}
+                  tag36h11:50:left:
+                    {}
+                  tag36h11:51:left:
+                    {}
                   tag36h11:52:left:
                     {}
+                  tag36h11:53:left:
+                    {}
+                  tag36h11:54:left:
+                    {}
+                  tag36h11:55:left:
+                    {}
+                  tag36h11:5:left:
+                    {}
+                  tag36h11:6:left:
+                    {}
                   tag36h11:7:left:
+                    {}
+                  tag36h11:8:left:
+                    {}
+                  tag36h11:9:left:
                     {}
               zed2i_right_camera_frame:
                 zed2i_right_camera_optical_frame:
@@ -349,9 +497,31 @@ Visualization Manager:
                     {}
                   tag36h11:11:right:
                     {}
+                  tag36h11:12:right:
+                    {}
+                  tag36h11:13:right:
+                    {}
+                  tag36h11:14:right:
+                    {}
+                  tag36h11:15:right:
+                    {}
                   tag36h11:16:right:
                     {}
+                  tag36h11:17:right:
+                    {}
+                  tag36h11:18:right:
+                    {}
+                  tag36h11:19:right:
+                    {}
                   tag36h11:1:right:
+                    {}
+                  tag36h11:20:right:
+                    {}
+                  tag36h11:21:right:
+                    {}
+                  tag36h11:22:right:
+                    {}
+                  tag36h11:23:right:
                     {}
                   tag36h11:24:right:
                     {}
@@ -361,7 +531,15 @@ Visualization Manager:
                     {}
                   tag36h11:27:right:
                     {}
+                  tag36h11:28:right:
+                    {}
+                  tag36h11:29:right:
+                    {}
+                  tag36h11:2:right:
+                    {}
                   tag36h11:30:right:
+                    {}
+                  tag36h11:31:right:
                     {}
                   tag36h11:32:right:
                     {}
@@ -378,6 +556,8 @@ Visualization Manager:
                   tag36h11:38:right:
                     {}
                   tag36h11:39:right:
+                    {}
+                  tag36h11:3:right:
                     {}
                   tag36h11:40:right:
                     {}
@@ -399,13 +579,30 @@ Visualization Manager:
                     {}
                   tag36h11:49:right:
                     {}
+                  tag36h11:4:right:
+                    {}
+                  tag36h11:50:right:
+                    {}
+                  tag36h11:51:right:
+                    {}
                   tag36h11:52:right:
+                    {}
+                  tag36h11:53:right:
+                    {}
+                  tag36h11:54:right:
+                    {}
+                  tag36h11:55:right:
+                    {}
+                  tag36h11:5:right:
+                    {}
+                  tag36h11:6:right:
                     {}
                   tag36h11:7:right:
                     {}
-        map:
-          odom:
-            {}
+                  tag36h11:8:right:
+                    {}
+                  tag36h11:9:right:
+                    {}
       Update Interval: 0
       Value: true
   Enabled: true
