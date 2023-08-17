@@ -1,7 +1,9 @@
 digraph G {
-"world" -> "stereo"[label=" Broadcaster: default_authority\nAverage rate: 15.995\nBuffer length: 4.876\nMost recent transform: 1683324276.99898\nOldest transform: 1683324272.122491\n"];
+"base_link" -> "robot"[label=" Broadcaster: default_authority\nAverage rate: 48.198\nBuffer length: 5.021\nMost recent transform: 1683753798.392199\nOldest transform: 1683753793.371277\n"];
+"base_link" -> "environment"[label=" Broadcaster: default_authority\nAverage rate: 48.198\nBuffer length: 5.021\nMost recent transform: 1683753798.392245\nOldest transform: 1683753793.371287\n"];
+"base_link" -> "uwb_markers"[label=" Broadcaster: default_authority\nAverage rate: 48.196\nBuffer length: 5.0\nMost recent transform: 1683753798.371682\nOldest transform: 1683753793.371291\n"];
 edge [style=invis];
  subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 1683324277.1059382"[ shape=plaintext ] ;
-}->"world";
+"Recorded at time: 1683753798.4029784"[ shape=plaintext ] ;
+}->"base_link";
 }
